@@ -1,6 +1,6 @@
 import React from 'react'
 import {notFound} from "next/navigation";
-import {IEvent} from "@/database";
+import {Booking, IEvent} from "@/database";
 import { getSimilarEventsBySlug } from '@/lib/actions/event.action';
 import Image from "next/image";
 import BookEvent from './BookEvent';
@@ -67,8 +67,6 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
 
     if(!description) return notFound();
 
-    const bookings = 10;
-
     const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
     return (
@@ -112,15 +110,10 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
                 <aside className="booking">
                     <div className="signup-card">
                         <h2>Book Your Spot</h2>
-                        {bookings > 0 ? (
-                            <p className="text-sm">
-                                Join {bookings} people who have already booked their spot!
-                            </p>
-                        ): (
-                            <p className="text-sm">Be the first to book your spot!</p>
-                        )}
 
-                        <BookEvent eventId={event._id} slug={event.slug} />
+                        {/* The BookEvent component below checks if the user email is already booked for this event */}
+                        <BookEvent eventId={event._id} />
+
                     </div>
                 </aside>
             </div>

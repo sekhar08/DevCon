@@ -47,8 +47,8 @@ bookingSchema.pre('save', async function (this: IBooking) {
   }
 });
 
-// Create index on eventId for faster queries (already defined in schema, but explicit for clarity)
-// bookingSchema.index({ eventId: 1 });
+// Create compound unique index to ensure a user can only register once per event
+bookingSchema.index({ eventId: 1, email: 1 }, { unique: true });
 
 // Create and export the Booking model
 const Booking: Model<IBooking> =

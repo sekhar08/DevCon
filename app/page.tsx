@@ -3,15 +3,16 @@ import ExploreBtn from "@/components/ExploreBtn";
 import { cacheLife } from "next/cache";
 import connectDB from "@/lib/mongodb";
 import { Event, type IEvent } from "@/database";
-import {events as eventsData} from "@/lib/constants";
+
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export default async function Home() {
   'use cache';
 
   cacheLife('minutes')
 
-  // const response = await fetch(`${BASE_URL}/api/events`);
-  // const  eventsData  = await response.json();
+  const response = await fetch(`${BASE_URL}/api/events`);
+  const  eventsData  = await response.json();
 
   return (
     <section>

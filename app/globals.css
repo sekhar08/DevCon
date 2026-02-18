@@ -182,14 +182,22 @@
     }
 
     #event-card {
-        @apply flex flex-col gap-3;
+        @apply flex flex-col overflow-hidden rounded-2xl border border-border-dark bg-[#12121280]/50 backdrop-blur-xl card-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl;
 
         .poster {
-            @apply h-[300px] w-full rounded-lg object-cover;
+            @apply h-[280px] w-full object-cover sm:h-[300px];
+        }
+
+        .event-card__body {
+            @apply flex flex-col gap-3 px-4 pb-4 pt-4 sm:px-5 sm:pb-5;
+        }
+
+        .event-card__meta {
+            @apply flex flex-row items-center gap-2;
         }
 
         .title {
-            @apply text-[20px] font-semibold line-clamp-1;
+            @apply text-[18px] sm:text-[20px] font-semibold leading-snug tracking-[-0.01em] line-clamp-2 text-light-100 transition-colors group-hover:text-primary;
         }
 
         p {
@@ -197,10 +205,10 @@
         }
 
         .datetime {
-            @apply text-light-200 flex flex-row flex-wrap items-center gap-4;
+            @apply text-light-200 flex flex-row flex-wrap items-center gap-4 pt-1;
 
             div {
-                @apply flex flex-row gap-2;
+                @apply flex flex-row items-center gap-2;
             }
         }
     }

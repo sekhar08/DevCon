@@ -1,19 +1,23 @@
+import { Suspense } from 'react';
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { cacheLife } from "next/cache";
-import connectDB from "@/lib/mongodb";
-import { Event, type IEvent } from "@/database";
+import { getEvents } from "@/lib/actions/event.action";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+async function EventsList() {
+  const events = await getEvents();
 
-export default async function Home() {
-  'use cache';
+  return (
+    <ol className="events">
+      {events.map((event) => (
+        <li key={event.title}>
+          <EventCard {...event} />
+        </li>
+      ))}
+    </ol>
+  );
+}
 
-  cacheLife('minutes')
-
-  const response = await fetch(`${BASE_URL}/api/events`);
-  const  eventsData  = await response.json();
-
+export default function Home() {
   return (
     <section>
       <h1 className="text-center">The Hub for Every Dev Event <br /> You Can&apos;t Miss</h1>
@@ -23,13 +27,9 @@ export default async function Home() {
 
       <div className="mt-20 space-y-7">
         <h3>Featured Events</h3>
-        <ol className="events">
-          {eventsData.map((event: any) => (
-            <li key={event.title}>
-              <EventCard {...event} />
-            </li>
-          ))}
-        </ol>
+        <Suspense fallback={<div>Loading events...</div>}>
+          <EventsList />
+        </Suspense>
       </div>
     </section>
   );

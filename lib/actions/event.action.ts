@@ -23,7 +23,6 @@ export const getEventBySlug = async (slug: string) => {
         const event = await Event.findOne({ slug }).lean();
         if (!event) return null;
 
-        // Ensure _id is string for client component props
         return {
             ...event,
             _id: event._id.toString()
@@ -31,5 +30,20 @@ export const getEventBySlug = async (slug: string) => {
     } catch (error) {
         console.error(error);
         return null;
+    }
+}
+
+export const getEvents = async () => {
+    try {
+        await connectDB();
+        const events = await Event.find().sort({ createdAt: -1 }).lean();
+
+        return events.map((event) => ({
+            ...event,
+            _id: event._id.toString(),
+        }));
+    } catch (error) {
+        console.error(error);
+        return [];
     }
 }

@@ -2,6 +2,7 @@
 
 import Event from '@/database/event.model';
 import connectDB from "@/lib/mongodb";
+import { cookies } from "next/headers";
 
 export const getSimilarEventsBySlug = async (slug: string) => {
     try {
@@ -35,6 +36,9 @@ export const getEventBySlug = async (slug: string) => {
 
 export const getEvents = async () => {
     try {
+        // Access request data first so using current time (via DB driver) is allowed
+        cookies();
+
         await connectDB();
         const events = await Event.find().sort({ createdAt: -1 }).lean();
 

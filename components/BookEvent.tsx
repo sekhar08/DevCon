@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
-import { createBooking } from "@/lib/actions/booking.action";
+import { createUserBooking } from "@/lib/actions/booking.action";
 
 const BookEvent = ({ eventId }: { eventId: string }) => {
     const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const BookEvent = ({ eventId }: { eventId: string }) => {
 
         setAlreadyBookedEmail(null);
 
-        const { success, alreadyBooked } = await createBooking({ eventId, email });
+        const { success, alreadyBooked } = await createUserBooking({ eventId, email });
 
         if (success) {
             setSubmitted(true);

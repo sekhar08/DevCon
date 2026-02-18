@@ -1,14 +1,14 @@
 import connectDB from "@/lib/mongodb";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Event from "@/database/event.model";
 
 type RouteParams = {
-    params: {
+    params: Promise<{
         slug: string;
-    }
+    }>;
 }
 
-export async function GET(request: Request, { params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
         
     try{
         await connectDB();

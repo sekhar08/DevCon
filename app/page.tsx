@@ -1,16 +1,15 @@
 import EventCard from "@/components/EventCard";
 import ExploreBtn from "@/components/ExploreBtn";
-import { events } from "@/lib/constants";
 import { cacheLife } from "next/cache";
+import connectDB from "@/lib/mongodb";
+import { Event, type IEvent } from "@/database";
 
 export default async function Home() {
   'use cache';
 
-  cacheLife('hours')
-  const events = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/events`);
-  const data = await events.json();
-
-  const eventsData = data.events;
+  cacheLife('minutes')
+  await connectDB();
+  const eventsData: IEvent[] = await Event.find().sort({ createdAt: -1 }).lean();
   return (
     <section>
       <h1 className="text-center">The Hub for Every Dev Event <br /> You Can&apos;t Miss</h1>

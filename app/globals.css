@@ -134,17 +134,27 @@
 
 @layer components {
     #home {
+        @apply flex flex-col gap-10;
+
         .subheading {
             @apply text-light-100 text-lg max-sm:text-sm text-center mt-5;
+        }
+
+        .featured-panel {
+            @apply glass card-shadow mt-16 space-y-8 w-full rounded-2xl border border-border-dark px-5 py-6 sm:px-8 sm:py-8;
+        }
+
+        .featured-header {
+            @apply flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between;
+        }
+
+        .featured-kicker {
+            @apply text-xs font-martian-mono tracking-[0.25em] uppercase text-light-200;
         }
     }
 
     #explore-btn {
-        @apply border-dark-200 bg-dark-100 flex w-fit cursor-pointer  rounded-full border px-8 py-3.5 max-sm:w-full text-center;
-
-        a {
-            @apply flex-center gap-2 text-center w-full;
-        }
+        @apply border-dark-200 bg-dark-100 flex-center gap-2 w-fit cursor-pointer rounded-full border px-8 py-3.5 max-sm:w-full text-center text-sm font-medium tracking-wide hover:border-primary hover:bg-dark-200 transition-colors;
     }
 
     header {

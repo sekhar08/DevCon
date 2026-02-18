@@ -48,7 +48,7 @@ bookingSchema.pre('save', async function (this: IBooking) {
 });
 
 // Create index on eventId for faster queries (already defined in schema, but explicit for clarity)
-bookingSchema.index({ eventId: 1 });
+// bookingSchema.index({ eventId: 1 });
 
 // Create and export the Booking model
 const Booking: Model<IBooking> =

@@ -177,7 +177,6 @@ const preSaveHook = function (this: IEvent, next: CallbackWithoutResultAndOption
     }
   }
 
-  next();
 };
 
 eventSchema.pre('save', preSaveHook as any);

@@ -111,16 +111,8 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
                     <div className="signup-card">
                         <h2>Book Your Spot</h2>
 
-                        {/* The BookEvent component below now checks if the user email is already booked for this event */}
-                        <BookEvent
-                            eventId={event._id}
-                            slug={event.slug}
-                            onEmailAlreadyBookedMessage={(email: string) => (
-                                <p className="already-booked-msg">
-                                    Booking failed: <strong>{email}</strong> is already registered for this event.
-                                </p>
-                            )}
-                        />
+                        {/* The BookEvent component below checks if the user email is already booked for this event */}
+                        <BookEvent eventId={event._id} />
 
                     </div>
                 </aside>

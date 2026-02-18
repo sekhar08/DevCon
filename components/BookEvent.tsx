@@ -3,17 +3,7 @@
 import React, { useState } from "react";
 import { createBooking } from "@/lib/actions/booking.action";
 
-const BookEvent = (
-    {
-        eventId,
-        slug,
-        onEmailAlreadyBookedMessage,
-    }: {
-        eventId: string;
-        slug: string;
-        onEmailAlreadyBookedMessage?: (email: string) => React.ReactNode;
-    },
-) => {
+const BookEvent = ({ eventId }: { eventId: string }) => {
     const [email, setEmail] = useState('');
     const [submitted, setSubmitted] = useState(false);
     const [alreadyBookedEmail, setAlreadyBookedEmail] = useState<string | null>(null);
@@ -44,8 +34,17 @@ const BookEvent = (
         <div id="book-event">
             {submitted ? (
                 <p className="text-sm">Thank you for signing up!</p>
-            ): (
-                <form onSubmit={handleSubmit}>
+            ) : (
+                <form
+                    onSubmit={(e) => {
+                        if (!email.trim()) {
+                            e.preventDefault();
+                            alert("Email is missing");
+                            return;
+                        }
+                        handleSubmit(e);
+                    }}
+                >
                     <div>
                         <label htmlFor="email">Email Address</label>
                         <input
@@ -57,12 +56,18 @@ const BookEvent = (
                         />
                     </div>
 
-                    <button type="submit" className="button-submit">Submit</button>
+                    <button
+                        type="submit"
+                        className="button-submit"
+                        disabled={!email.trim()}
+                    >
+                        Submit
+                    </button>
 
-                    {alreadyBookedEmail && onEmailAlreadyBookedMessage && (
-                        <>
-                            {onEmailAlreadyBookedMessage(alreadyBookedEmail)}
-                        </>
+                    {alreadyBookedEmail && (
+                        <p className="already-booked-msg">
+                            Booking failed: <strong>{alreadyBookedEmail}</strong> is already registered for this event.
+                        </p>
                     )}
                 </form>
             )}

@@ -5,6 +5,9 @@ import ExploreBtn from "@/components/ExploreBtn";
 import { getEvents } from "@/lib/actions/event.action";
 
 async function EventsList() {
+  // Ensure this component reads request data before any underlying time-based work
+  cookies();
+
   const events = await getEvents();
 
   return (
@@ -19,9 +22,6 @@ async function EventsList() {
 }
 
 export default function Home() {
-  // Access request data before any underlying time-based operations
-  cookies();
-
   return (
     <section
       id="home"

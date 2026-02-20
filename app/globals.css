@@ -288,4 +288,450 @@
             }
         }
     }
+
+    /* ═══════════════════════════════════════════════════════════
+       CREATE EVENT — "Mission Briefing" Design System
+       ═══════════════════════════════════════════════════════════ */
+
+    #create-event {
+        @apply flex flex-col gap-12 max-w-5xl mx-auto w-full pb-20;
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+            transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+
+        &.ce-mounted {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── Hero header ────────────────────────────────────────── */
+    .ce-hero {
+        @apply flex flex-col gap-4 pt-4;
+    }
+
+    .ce-hero__badge {
+        @apply flex items-center gap-3 font-martian-mono text-[11px] tracking-[0.3em] uppercase text-light-200;
+    }
+
+    .ce-hero__dot {
+        @apply inline-block w-2 h-2 rounded-full bg-primary;
+        box-shadow: 0 0 8px var(--primary), 0 0 20px var(--primary);
+        animation: ce-pulse 2s ease-in-out infinite;
+    }
+
+    .ce-hero__title {
+        @apply text-5xl sm:text-7xl font-bold leading-[0.95] tracking-tight;
+        background: linear-gradient(180deg, #ffffff 30%, var(--color-blue) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .ce-hero__title-accent {
+        color: var(--primary);
+        -webkit-text-fill-color: var(--primary);
+    }
+
+    .ce-hero__desc {
+        @apply text-light-200 text-base sm:text-lg max-w-xl;
+        line-height: 1.7;
+
+        strong {
+            @apply text-primary font-semibold;
+        }
+    }
+
+    /* ── Alerts ──────────────────────────────────────────────── */
+    .ce-alert {
+        @apply flex items-center gap-3 rounded-lg px-5 py-3.5 text-sm font-medium border;
+        animation: ce-fade-slide 0.35s ease-out;
+    }
+
+    .ce-alert--error {
+        @apply bg-red-500/8 border-red-500/25 text-red-400;
+    }
+
+    .ce-alert--success {
+        @apply bg-emerald-500/8 border-emerald-500/25 text-emerald-400;
+    }
+
+    /* ── Layout: rail + form ─────────────────────────────────── */
+    .ce-layout {
+        @apply flex gap-10;
+    }
+
+    /* ── Progress rail (desktop) ─────────────────────────────── */
+    .ce-rail {
+        @apply hidden lg:flex flex-col gap-0 relative pt-6;
+        width: 72px;
+        flex-shrink: 0;
+    }
+
+    .ce-rail__line {
+        @apply absolute left-[15px] top-6 bottom-0 w-px;
+        background: linear-gradient(180deg,
+                var(--primary) 0%,
+                rgba(89, 222, 202, 0.15) 100%);
+    }
+
+    .ce-rail__step {
+        @apply flex flex-col items-center gap-1 relative z-10;
+        height: calc(100% / 6);
+        min-height: 100px;
+    }
+
+    .ce-rail__marker {
+        @apply flex-center w-[30px] h-[30px] rounded-full text-[10px] font-martian-mono font-bold tracking-wider;
+        background: var(--color-dark-100);
+        border: 1.5px solid rgba(89, 222, 202, 0.35);
+        color: var(--primary);
+        box-shadow: 0 0 12px rgba(89, 222, 202, 0.1);
+    }
+
+    .ce-rail__label {
+        @apply text-[9px] font-martian-mono tracking-[0.2em] uppercase text-light-200/50 mt-1;
+        writing-mode: horizontal-tb;
+    }
+
+    /* ── Form container ──────────────────────────────────────── */
+    .ce-form {
+        @apply flex flex-col gap-0 flex-1 min-w-0;
+    }
+
+    /* ── Section blocks ──────────────────────────────────────── */
+    .ce-section {
+        @apply relative;
+        padding: 2rem 0;
+        border-bottom: 1px solid rgba(21, 16, 36, 0.6);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: ce-section-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation-delay: calc(var(--step-idx, 0) * 0.08s + 0.3s);
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+
+        &::before {
+            content: '';
+            @apply absolute left-0 top-8 bottom-8 w-[3px] rounded-full;
+            background: linear-gradient(180deg,
+                    var(--primary) 0%,
+                    transparent 100%);
+            opacity: 0.4;
+            transition: opacity 0.3s;
+        }
+
+        &:hover::before {
+            opacity: 0.8;
+        }
+    }
+
+    .ce-section__head {
+        @apply flex items-baseline gap-4 mb-6 pl-5;
+    }
+
+    .ce-section__num {
+        @apply font-martian-mono text-xs tracking-[0.2em] text-primary/50;
+    }
+
+    .ce-section__title {
+        @apply font-schibsted-grotesk text-xl font-bold text-light-100;
+    }
+
+    .ce-section__body {
+        @apply flex flex-col gap-5 pl-5;
+    }
+
+    /* ── Fields ───────────────────────────────────────────────── */
+    .ce-field {
+        @apply flex flex-col gap-2;
+
+        label {
+            @apply text-xs font-martian-mono tracking-[0.15em] uppercase text-light-200/70;
+        }
+
+        input,
+        textarea {
+            @apply bg-dark-200/60 rounded-lg px-4 py-3.5 text-light-100 border border-border-dark/60 transition-all duration-250;
+            font-size: 0.95rem;
+
+            &::placeholder {
+                @apply text-light-200/30;
+            }
+
+            &:focus {
+                @apply outline-none border-primary/40;
+                background: rgba(24, 40, 48, 0.9);
+                box-shadow: 0 0 0 3px rgba(89, 222, 202, 0.08),
+                    0 0 20px rgba(89, 222, 202, 0.06);
+            }
+        }
+
+        textarea {
+            @apply resize-y;
+            min-height: 90px;
+        }
+    }
+
+    .ce-row {
+        @apply grid gap-4 sm:grid-cols-2;
+    }
+
+    .ce-row--3col {
+        @apply lg:grid-cols-3;
+    }
+
+    /* ── Mode toggle pills ───────────────────────────────────── */
+    .ce-mode-group {
+        @apply flex gap-2;
+    }
+
+    .ce-mode-btn {
+        @apply flex-1 py-3 rounded-lg text-sm font-medium cursor-pointer border border-border-dark/60 transition-all duration-200;
+        background: var(--color-dark-200);
+        color: var(--color-light-200);
+
+        &:hover {
+            @apply border-primary/30;
+        }
+    }
+
+    .ce-mode-btn--active {
+        background: rgba(89, 222, 202, 0.12);
+        border-color: var(--primary);
+        color: var(--primary);
+        box-shadow: 0 0 16px rgba(89, 222, 202, 0.1);
+    }
+
+    /* ── Image dropzone ──────────────────────────────────────── */
+    .ce-dropzone {
+        @apply relative flex-center w-full rounded-xl cursor-pointer overflow-hidden transition-all duration-300;
+        min-height: 240px;
+        border: 2px dashed rgba(21, 16, 36, 0.8);
+        background: linear-gradient(135deg,
+                rgba(24, 40, 48, 0.3) 0%,
+                rgba(13, 22, 26, 0.5) 100%);
+
+        &:hover {
+            border-color: rgba(89, 222, 202, 0.3);
+            background: linear-gradient(135deg,
+                    rgba(24, 40, 48, 0.5) 0%,
+                    rgba(13, 22, 26, 0.7) 100%);
+        }
+    }
+
+    .ce-dropzone--has-image {
+        border-style: solid;
+        border-color: rgba(89, 222, 202, 0.2);
+    }
+
+    .ce-dropzone__img {
+        @apply object-cover;
+    }
+
+    .ce-dropzone__scanlines {
+        @apply absolute inset-0 pointer-events-none;
+        background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 2px,
+                rgba(89, 222, 202, 0.02) 2px,
+                rgba(89, 222, 202, 0.02) 4px);
+    }
+
+    .ce-dropzone__inner {
+        @apply flex flex-col items-center gap-3;
+    }
+
+    .ce-dropzone__icon {
+        @apply text-primary/40;
+        animation: ce-float 3s ease-in-out infinite;
+    }
+
+    .ce-dropzone__text {
+        @apply text-sm text-light-200/60 font-medium;
+    }
+
+    .ce-dropzone__hint {
+        @apply text-[11px] font-martian-mono text-light-200/30 tracking-wider;
+    }
+
+    /* ── Agenda timeline ─────────────────────────────────────── */
+    .ce-agenda {
+        @apply flex flex-col gap-0;
+    }
+
+    .ce-agenda__item {
+        @apply flex items-center gap-3;
+
+        input {
+            @apply flex-1 bg-dark-200/60 rounded-lg px-4 py-3.5 text-light-100 border border-border-dark/60 transition-all duration-250;
+            font-size: 0.95rem;
+
+            &::placeholder {
+                @apply text-light-200/30;
+            }
+
+            &:focus {
+                @apply outline-none border-primary/40;
+                background: rgba(24, 40, 48, 0.9);
+                box-shadow: 0 0 0 3px rgba(89, 222, 202, 0.08);
+            }
+        }
+    }
+
+    .ce-agenda__rail {
+        @apply flex flex-col items-center shrink-0;
+        width: 20px;
+    }
+
+    .ce-agenda__dot {
+        @apply w-2.5 h-2.5 rounded-full shrink-0;
+        background: var(--primary);
+        box-shadow: 0 0 6px rgba(89, 222, 202, 0.3);
+    }
+
+    .ce-agenda__connector {
+        @apply w-px flex-1;
+        min-height: 16px;
+        background: linear-gradient(180deg, var(--primary), transparent);
+        opacity: 0.3;
+    }
+
+    .ce-agenda__remove {
+        @apply flex-center w-7 h-7 rounded-full cursor-pointer shrink-0 text-light-200/30 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200;
+    }
+
+    /* ── Add button ──────────────────────────────────────────── */
+    .ce-add-btn {
+        @apply flex items-center gap-2 w-fit text-xs font-martian-mono tracking-wider uppercase text-primary/80 font-medium px-4 py-2.5 rounded-lg cursor-pointer border border-primary/15 transition-all duration-200;
+        background: rgba(89, 222, 202, 0.04);
+
+        &:hover {
+            background: rgba(89, 222, 202, 0.1);
+            border-color: rgba(89, 222, 202, 0.35);
+        }
+    }
+
+    /* ── Tags ────────────────────────────────────────────────── */
+    .ce-tags {
+        @apply flex flex-wrap gap-2;
+    }
+
+    .ce-tag {
+        @apply flex items-center gap-1.5 text-sm font-medium rounded-full px-3.5 py-1.5 transition-all duration-200;
+        background: rgba(89, 222, 202, 0.07);
+        border: 1px solid rgba(89, 222, 202, 0.2);
+        color: var(--primary);
+        animation: ce-tag-in 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+        button {
+            @apply flex-center cursor-pointer transition-colors duration-200 text-primary/40 hover:text-red-400;
+        }
+    }
+
+    .ce-tag__hash {
+        @apply text-primary/40 font-martian-mono text-xs;
+    }
+
+    .ce-tag-input {
+        @apply flex gap-3;
+
+        input {
+            @apply flex-1 bg-dark-200/60 rounded-lg px-4 py-3.5 text-light-100 border border-border-dark/60 transition-all duration-250;
+            font-size: 0.95rem;
+
+            &::placeholder {
+                @apply text-light-200/30;
+            }
+
+            &:focus {
+                @apply outline-none border-primary/40;
+                background: rgba(24, 40, 48, 0.9);
+                box-shadow: 0 0 0 3px rgba(89, 222, 202, 0.08);
+            }
+        }
+    }
+
+    /* ── Deploy button ───────────────────────────────────────── */
+    .ce-submit {
+        @apply relative flex items-center justify-center gap-3 w-full py-4.5 rounded-xl text-base font-bold tracking-wider uppercase cursor-pointer transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed;
+        background: var(--primary);
+        color: #030708;
+        box-shadow: 0 0 30px rgba(89, 222, 202, 0.2),
+            0 0 60px rgba(89, 222, 202, 0.05);
+        margin-top: 1rem;
+        font-family: var(--font-martian-mono);
+        letter-spacing: 0.15em;
+
+        &:hover:not(:disabled) {
+            box-shadow: 0 0 40px rgba(89, 222, 202, 0.35),
+                0 0 80px rgba(89, 222, 202, 0.1);
+            transform: translateY(-1px);
+        }
+
+        &:active:not(:disabled) {
+            transform: scale(0.985);
+        }
+    }
+
+    .ce-submit__spinner {
+        @apply inline-block w-5 h-5 rounded-full;
+        border: 2px solid rgba(3, 7, 8, 0.15);
+        border-top-color: #030708;
+        animation: ce-spin 0.6s linear infinite;
+    }
+
+    /* ── Keyframes ────────────────────────────────────────────── */
+    @keyframes ce-pulse {
+
+        0%,
+        100% {
+            box-shadow: 0 0 8px var(--primary), 0 0 20px var(--primary);
+        }
+
+        50% {
+            box-shadow: 0 0 4px var(--primary), 0 0 10px var(--primary);
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes ce-section-reveal {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes ce-float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-6px);
+        }
+    }
+
+    @keyframes ce-tag-in {
+        from {
+            opacity: 0;
+            transform: scale(0.85);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes ce-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
 }

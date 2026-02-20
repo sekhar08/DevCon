@@ -6,16 +6,6 @@ import { useRouter } from 'next/navigation';
 
 const EVENT_MODES = ['Online', 'Offline', 'Hybrid'];
 
-// ── Step config for the progress rail ─────────────────────────
-const STEPS = [
-    { id: 'basics', label: 'Basics' },
-    { id: 'image', label: 'Visual' },
-    { id: 'logistics', label: 'Logistics' },
-    { id: 'people', label: 'People' },
-    { id: 'agenda', label: 'Agenda' },
-    { id: 'tags', label: 'Tags' },
-];
-
 export default function CreateEvent() {
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -193,17 +183,6 @@ export default function CreateEvent() {
 
             {/* ═══ Main form with progress rail ═══ */}
             <div className="ce-layout">
-                {/* ── Vertical progress rail (desktop) ─── */}
-                <aside className="ce-rail" aria-hidden="true">
-                    {STEPS.map((step, i) => (
-                        <div key={step.id} className="ce-rail__step">
-                            <span className="ce-rail__marker">{String(i + 1).padStart(2, '0')}</span>
-                            <span className="ce-rail__label">{step.label}</span>
-                        </div>
-                    ))}
-                    <div className="ce-rail__line" />
-                </aside>
-
                 {/* ── Form ─── */}
                 <form onSubmit={handleSubmit} className="ce-form">
 

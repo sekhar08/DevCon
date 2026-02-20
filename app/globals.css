@@ -560,7 +560,7 @@
 
     /* ── Agenda timeline ─────────────────────────────────────── */
     .ce-agenda {
-        @apply flex flex-col gap-0;
+        @apply flex flex-col gap-3;
     }
 
     .ce-agenda__item {

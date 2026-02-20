@@ -216,19 +216,45 @@ export default function CreateEvent() {
                         </div>
                         <div className="ce-section__body">
                             <div
-                                className={`ce-dropzone ${imagePreview ? 'ce-dropzone--has-image' : ''}`}
-                                onClick={() => fileInputRef.current?.click()}
+                                className={`ce-dropzone ${imagePreview ? 'ce-dropzone--has-image cursor-default' : ''}`}
+                                onClick={() => { if (!imagePreview) fileInputRef.current?.click() }}
                                 role="button"
                                 tabIndex={0}
-                                onKeyDown={(e) => e.key === 'Enter' && fileInputRef.current?.click()}
+                                onKeyDown={(e) => e.key === 'Enter' && !imagePreview && fileInputRef.current?.click()}
                             >
                                 {imagePreview ? (
-                                    <Image
-                                        src={imagePreview}
-                                        alt="Event preview"
-                                        fill
-                                        className="ce-dropzone__img"
-                                    />
+                                    <>
+                                        <Image
+                                            src={imagePreview}
+                                            alt="Event preview"
+                                            fill
+                                            className="ce-dropzone__img"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute top-4 right-4 flex items-center justify-center w-10 h-10 rounded-full bg-dark-100/80 hover:bg-red-500/20 text-light-200 hover:text-red-400 backdrop-blur-md border border-border-dark transition-colors z-10"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setImagePreview(null);
+                                                setImageBase64('');
+                                                if (fileInputRef.current) fileInputRef.current.value = '';
+                                            }}
+                                            aria-label="Remove image"
+                                        >
+                                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="absolute bottom-4 right-4 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-dark-100/80 hover:bg-dark-200 text-light-200 backdrop-blur-md border border-border-dark transition-colors text-sm font-medium z-10"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                fileInputRef.current?.click();
+                                            }}
+                                        >
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></svg>
+                                            Replace
+                                        </button>
+                                    </>
                                 ) : (
                                     <div className="ce-dropzone__inner">
                                         <div className="ce-dropzone__icon">

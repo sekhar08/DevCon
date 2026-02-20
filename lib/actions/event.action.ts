@@ -37,7 +37,7 @@ export const getEventBySlug = async (slug: string) => {
 export const getEvents = async () => {
     try {
         // Access request data first so using current time (via DB driver) is allowed
-        cookies();
+        await cookies();
 
         await connectDB();
         const events = await Event.find().sort({ createdAt: -1 }).lean();

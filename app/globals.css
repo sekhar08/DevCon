@@ -197,7 +197,7 @@
         }
 
         .title {
-            @apply text-[18px] sm:text-[20px] font-semibold leading-snug tracking-[-0.01em] line-clamp-2 text-light-100 transition-colors group-hover:text-primary;
+            @apply text-[18px] sm:text-[20px] font-semibold leading-snug tracking-[-0.01em] line-clamp-2 text-left text-light-100 transition-colors group-hover:text-primary;
         }
 
         p {

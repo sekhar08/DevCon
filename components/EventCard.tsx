@@ -15,7 +15,7 @@ const EventCard = ({ title, image, slug, location, date, time }: Props) => {
     <Link
       href={`/events/${slug}`}
       id="event-card"
-      className="glass card-shadow group transition-transform duration-300 hover:-translate-y-1 hover:shadow-2xl"
+      className="event-card group"
     >
       <Image
         src={image}
@@ -25,23 +25,23 @@ const EventCard = ({ title, image, slug, location, date, time }: Props) => {
         className="poster"
       />
 
-      <div className="flex flex-row gap-2">
-        <Image src="/icons/pin.svg" alt="location" width={14} height={14} />
-        <p>{location}</p>
-      </div>
-
-      <p className="title group-hover:text-primary transition-colors">
-        {title}
-      </p>
-
-      <div className="datetime">
-        <div>
-          <Image src="/icons/calendar.svg" alt="date" width={14} height={14} />
-          <p>{date}</p>
+      <div className="event-card__body">
+        <div className="event-card__meta">
+          <Image src="/icons/pin.svg" alt="location" width={14} height={14} />
+          <p>{location}</p>
         </div>
-        <div>
-          <Image src="/icons/clock.svg" alt="time" width={14} height={14} />
-          <p>{time}</p>
+
+        <p className="title">{title}</p>
+
+        <div className="datetime">
+          <div>
+            <Image src="/icons/calendar.svg" alt="date" width={14} height={14} />
+            <p>{date}</p>
+          </div>
+          <div>
+            <Image src="/icons/clock.svg" alt="time" width={14} height={14} />
+            <p>{time}</p>
+          </div>
         </div>
       </div>
     </Link>

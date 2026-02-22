@@ -3,10 +3,18 @@
 import { useState, useRef, useEffect, FormEvent, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useSession } from '@/lib/auth-client';
+import { redirect } from 'next/navigation';
 
 const EVENT_MODES = ['Online', 'Offline', 'Hybrid'];
 
 export default function CreateEvent() {
+    const session = useSession();
+
+    if (!session.data) {
+        redirect("/auth");
+    }
+
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [mounted, setMounted] = useState(false);

@@ -88,7 +88,7 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
                 {/*    Right Side - Booking Form */}
                 <aside className="booking">
                     <div className="signup-card">
-                        <h2>Book Your Spot</h2>
+                        <h2>RSVP for this Event</h2>
 
                         {/* The BookEvent component below checks if the user email is already booked for this event */}
                         <BookEvent eventId={event._id} />

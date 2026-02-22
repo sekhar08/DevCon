@@ -11,10 +11,11 @@ async function EventsList() {
   await cookies();
 
   const events = await getEvents();
+  const topEvents = events.slice(0, 3);
 
   return (
     <StaggerContainer className="events">
-      {events.map((event) => (
+      {topEvents.map((event) => (
         <FadeInUp key={event.title} className="w-full">
           <EventCard {...event} />
         </FadeInUp>

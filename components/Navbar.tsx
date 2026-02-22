@@ -3,24 +3,28 @@
 import { useState, Suspense } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
 import { Menu, X } from "lucide-react"
-
-const links = [
-    { name: "Home", href: "/" },
-    { name: "Events", href: "/events" },
-    { name: "Create Event", href: "/createEvent" },
-];
+import { useSession, signOut } from "@/lib/auth-client";
 
 function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () => void }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const session = useSession();
+    const dynamicLinks = [
+        { name: "Home", href: "/" },
+        { name: "Events", href: "/events" },
+        session.data
+            ? { name: "Create Event", href: "/createEvent" }
+            : { name: "Sign In", href: "/auth" }
+    ];
 
     return (
         <ul className={isMobile
             ? "flex flex-col items-center gap-4 px-4 py-8"
             : "flex items-center gap-1 p-1 bg-dark-200/50 backdrop-blur-sm rounded-full border border-border-dark/40"}>
-            {links.map((link) => {
+            {dynamicLinks.map((link) => {
                 const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
                 return (
                     <Link
@@ -40,6 +44,23 @@ function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () 
                     </Link>
                 );
             })}
+            {session.data && (
+                <button
+                    onClick={async () => {
+                        await signOut({
+                            fetchOptions: {
+                                onSuccess: () => {
+                                    router.push("/auth");
+                                }
+                            }
+                        });
+                        if (closeMenu) closeMenu();
+                    }}
+                    className={`relative px-5 py-2 text-sm font-medium rounded-full transition-colors duration-300 ${isMobile ? 'w-full text-center text-lg py-3' : ''} text-light-200 hover:text-red-500`}
+                >
+                    <span className="relative z-10">Sign Out</span>
+                </button>
+            )}
         </ul>
     );
 }

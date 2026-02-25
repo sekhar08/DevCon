@@ -41,6 +41,22 @@ export default function SignIn() {
                         </p>
                     </div>
 
+                    {/* Test Credentials Info */}
+                    <div className="bg-primary/5 border border-primary/20 p-4 text-xs font-martian-mono flex flex-col gap-2">
+                        <p className="text-primary font-bold uppercase tracking-[0.2em] mb-1 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" /></svg>
+                            Demo Credentials
+                        </p>
+                        <div className="flex justify-between border-b border-primary/10 pb-1">
+                            <span className="text-light-200/50 uppercase tracking-widest">Email:</span>
+                            <span className="text-light-100 select-all">testuser@gmail.com</span>
+                        </div>
+                        <div className="flex justify-between pt-1">
+                            <span className="text-light-200/50 uppercase tracking-widest">Passkey:</span>
+                            <span className="text-light-100 select-all">testuser123</span>
+                        </div>
+                    </div>
+
                     {/* Form */}
                     <div className="flex flex-col gap-5">
                         <div className="flex flex-col gap-2 relative group/input">

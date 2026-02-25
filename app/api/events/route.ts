@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { v2 as cloudinary } from "cloudinary";
 import { Event } from "@/database";
 import connectDB from "@/lib/mongodb";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -12,6 +14,14 @@ cloudinary.config({
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await auth.api.getSession({
+            headers: await headers()
+        });
+
+        if (!session || !session.user) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
         await connectDB();
         const { title, description, overview, image, venue, location, date, time, mode, audience, agenda, organizer, tags } = await request.json();
 
@@ -24,6 +34,7 @@ export async function POST(request: NextRequest) {
             const event = await Event.create({
                 title, description, overview, image: imageUrl.secure_url,
                 venue, location, date, time, mode, audience, agenda, organizer, tags,
+                userId: session.user.id
             });
 
             return NextResponse.json({ message: "Event created successfully", event }, { status: 201 });
@@ -37,7 +48,8 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export async function GET(request: NextRequest) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function GET(_request: NextRequest) {
     try {
         await connectDB();
         const events = await Event.find().sort({ createdAt: -1 });

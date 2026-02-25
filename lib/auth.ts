@@ -10,9 +10,15 @@ export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL || (process.env.NODE_ENV === "production" ? "https://dev-con-ruddy.vercel.app" : "http://localhost:3000"),
   trustedOrigins: ["https://dev-con-ruddy.vercel.app", "http://localhost:3000"],
   database: mongodbAdapter(db, {
-    // Optional: if you don't provide a client, database transactions won't be enabled.
     client
   }),
+  emailAndPassword: {
+    enabled: true,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async sendResetPassword(_data, _request) {
+      // Send an email to the user with a link to reset their password
+    },
+  },
   experimental: { joins: true },
   socialProviders: {
     github: {

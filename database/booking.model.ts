@@ -1,9 +1,9 @@
 import mongoose, { Schema, Model, Document, Types } from 'mongoose';
 import Event from './event.model';
 
-// TypeScript interface for Booking document
 export interface IBooking extends Document {
   eventId: Types.ObjectId;
+  userId: string;
   email: string;
   createdAt: Date;
   updatedAt: Date;
@@ -17,6 +17,12 @@ const bookingSchema = new Schema<IBooking>(
       ref: 'Event',
       required: [true, 'Event ID is required'],
       index: true, // Index for faster queries
+    },
+    userId: {
+      type: String,
+      ref: 'user',
+      required: [true, 'User ID is required'],
+      index: true,
     },
     email: {
       type: String,
@@ -48,7 +54,7 @@ bookingSchema.pre('save', async function (this: IBooking) {
 });
 
 // Create compound unique index to ensure a user can only register once per event
-bookingSchema.index({ eventId: 1, email: 1 }, { unique: true });
+bookingSchema.index({ eventId: 1, userId: 1 }, { unique: true });
 
 // Create and export the Booking model
 const Booking: Model<IBooking> =

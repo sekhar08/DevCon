@@ -15,6 +15,7 @@ export interface IEvent extends Document {
   audience: string;
   agenda: string[];
   organizer: string;
+  userId: string; // Reference to User who created the event
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -126,6 +127,12 @@ const eventSchema = new Schema<IEvent>(
         message: 'Tags must be a non-empty array',
       },
     },
+    userId: {
+      type: String,
+      ref: 'user', // Reference to the Better Auth user collection
+      required: [true, 'User ID is required'],
+      index: true,
+    },
   },
   {
     timestamps: true, // Automatically adds createdAt and updatedAt
@@ -160,7 +167,7 @@ const preSaveHook = function (this: IEvent, next: CallbackWithoutResultAndOption
           return next(new Error('Invalid date format. Expected YYYY-MM-DD or a valid date string.'));
         }
       }
-    } catch (error) {
+    } catch {
       return next(new Error('Invalid date format. Expected YYYY-MM-DD or a valid date string.'));
     }
   }
@@ -177,8 +184,11 @@ const preSaveHook = function (this: IEvent, next: CallbackWithoutResultAndOption
     }
   }
 
+  next();
 };
 
+// Reverting to `any` cast without explicit typings as the explicit Document approach breaks the `save` signature inference.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 eventSchema.pre('save', preSaveHook as any);
 
 // Create unique index on slug

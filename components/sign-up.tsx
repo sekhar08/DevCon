@@ -201,7 +201,9 @@ export default function SignUp() {
                                     fetchOptions: {
                                         onResponse: () => setLoading(false),
                                         onRequest: () => setLoading(true),
-                                        onError: (ctx) => toast.error(ctx.error.message),
+                                        onError: (ctx) => {
+                                            toast.error(ctx.error.message);
+                                        },
                                         onSuccess: () => router.push("/"),
                                     },
                                 });

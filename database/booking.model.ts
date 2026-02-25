@@ -5,6 +5,7 @@ export interface IBooking extends Document {
   eventId: Types.ObjectId;
   userId: string;
   email: string;
+  status: 'rsvp' | 'confirmed' | 'rejected';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,6 +24,11 @@ const bookingSchema = new Schema<IBooking>(
       ref: 'user',
       required: [true, 'User ID is required'],
       index: true,
+    },
+    status: {
+      type: String,
+      enum: ['rsvp', 'confirmed', 'rejected'],
+      default: 'rsvp',
     },
     email: {
       type: String,

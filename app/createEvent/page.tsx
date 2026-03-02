@@ -5,6 +5,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
 import { redirect } from 'next/navigation';
+import { format } from "date-fns";
+import { Calendar as CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
 
 const EVENT_MODES = ['Online', 'Offline', 'Hybrid'];
 
@@ -29,7 +38,7 @@ export default function CreateEvent() {
     const [overview, setOverview] = useState('');
     const [venue, setVenue] = useState('');
     const [location, setLocation] = useState('');
-    const [date, setDate] = useState('');
+    const [date, setDate] = useState<Date | undefined>(undefined);
     const [time, setTime] = useState('');
     const [mode, setMode] = useState(EVENT_MODES[0]);
     const [audience, setAudience] = useState('');
@@ -129,7 +138,7 @@ export default function CreateEvent() {
                     image: imageBase64,
                     venue: venue.trim(),
                     location: location.trim(),
-                    date,
+                    date: date ? format(date, 'yyyy-MM-dd') : '',
                     time,
                     mode,
                     audience: audience.trim(),
@@ -302,7 +311,28 @@ export default function CreateEvent() {
                             <div className="ce-row ce-row--3col">
                                 <div className="ce-field">
                                     <label htmlFor="ce-date">Date</label>
-                                    <input id="ce-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <button
+                                                type="button"
+                                                className={cn(
+                                                    "w-full flex justify-between items-center bg-dark-200/60 rounded-lg px-4 py-3.5 text-light-100 border border-border-dark/60 transition-all duration-250 hover:border-primary/40 focus:outline-none focus:border-primary/40 cursor-pointer",
+                                                    !date && "text-light-200/30"
+                                                )}
+                                            >
+                                                <span>{date ? format(date, "PPP") : "Pick a date"}</span>
+                                                <CalendarIcon className="h-4 w-4 opacity-50" />
+                                            </button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0 bg-dark-200 border-border-dark rounded-xl" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                selected={date}
+                                                onSelect={setDate}
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
                                 </div>
                                 <div className="ce-field">
                                     <label htmlFor="ce-time">Time</label>

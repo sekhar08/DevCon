@@ -5,12 +5,6 @@ import connectDB from "@/lib/mongodb";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
-    secure: true,
-});
 
 export async function POST(request: NextRequest) {
     try {
@@ -26,6 +20,13 @@ export async function POST(request: NextRequest) {
         const { title, description, overview, image, venue, location, date, time, mode, audience, agenda, organizer, tags } = await request.json();
 
         try {
+            cloudinary.config({
+                cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+                api_key: process.env.CLOUDINARY_API_KEY,
+                api_secret: process.env.CLOUDINARY_API_SECRET,
+                secure: true,
+            });
+
             const imageUrl = await cloudinary.uploader.upload(image, {
                 resource_type: "image",
                 folder: "DevEvents",

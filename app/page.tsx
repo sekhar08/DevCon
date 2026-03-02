@@ -5,6 +5,7 @@ import ExploreBtn from "@/components/ExploreBtn";
 import { getEvents } from "@/lib/actions/event.action";
 import BlurIn from "@/components/BlurIn";
 import { StaggerContainer, FadeInUp } from "@/components/StaggerIn";
+import ChatBot from "@/components/ChatBot";
 
 async function EventsList() {
   // Ensure this component reads request data before any underlying time-based work
@@ -82,6 +83,10 @@ export default function Home() {
           </Suspense>
         </div>
       </BlurIn>
+
+      <Suspense fallback={null}>
+        <ChatBot />
+      </Suspense>
     </section>
   );
 }

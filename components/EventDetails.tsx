@@ -5,6 +5,15 @@ import { getSimilarEventsBySlug, getEventBySlug } from '@/lib/actions/event.acti
 import Image from "next/image";
 import BookEvent from './BookEvent';
 import EventCard from "@/components/EventCard";
+import AttendeeCard from "@/components/AttendeeCard";
+import { getEventAttendees } from '@/lib/actions/booking.action';
+import { IBooking } from '@/database/booking.model';
+import { Document } from "mongoose";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { ShieldAlert } from "lucide-react";
+
+type BookingCore = Omit<IBooking, keyof Document | '_id' | 'eventId'> & { _id: string, eventId: string };
 
 const EventDetailItem = ({ icon, alt, label }: { icon: string; alt: string; label: string; }) => (
     <div className="flex-row-gap-2 items-center">
@@ -48,6 +57,17 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
 
     const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
 
+    // Authentication + Authorization Check for Event Owner
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
+    const isOwner = session && session.user && session.user.id === event.userId;
+    let attendees: BookingCore[] = [];
+    if (isOwner) {
+        attendees = await getEventAttendees({ eventId: event._id });
+    }
+
     return (
         <section id="event">
             <div className="header">
@@ -85,15 +105,50 @@ const EventDetails = async ({ params }: { params: Promise<string> }) => {
                     <EventTags tags={tags} />
                 </div>
 
-                {/*    Right Side - Booking Form */}
-                <aside className="booking">
-                    <div className="signup-card">
+                {/*    Right Side - Booking Form & Host Controls */}
+                <aside className="flex flex-col gap-6 w-full max-w-[400px]">
+                    <div className="signup-card w-full">
                         <h2>RSVP for this Event</h2>
 
                         {/* The BookEvent component below checks if the user email is already booked for this event */}
                         <BookEvent eventId={event._id} />
 
                     </div>
+
+                    {isOwner && (
+                        <div className="bg-dark-200/40 border border-primary/20 p-6 rounded-2xl shadow-[0_0_20px_rgba(89,222,202,0.05)] backdrop-blur-md">
+                            <div className="flex items-center gap-3 border-b border-primary/20 pb-4 mb-4">
+                                <ShieldAlert size={20} className="text-primary" />
+                                <h3 className="font-schibsted-grotesk text-xl font-bold tracking-tight text-white">
+                                    Host Controls
+                                </h3>
+                            </div>
+
+                            <div className="flex items-center justify-between mb-2">
+                                <p className="font-martian-mono text-xs text-light-200/70 tracking-widest uppercase">
+                                    Incoming Requests
+                                </p>
+                                <span className="text-primary font-bold text-sm bg-primary/10 px-2 py-0.5 rounded-full">
+                                    {attendees.length}
+                                </span>
+                            </div>
+
+                            {attendees.length === 0 ? (
+                                <p className="text-sm text-light-200/50 italic py-4">No reservations detected.</p>
+                            ) : (
+                                <div className="flex flex-col max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+                                    {attendees.map((attendee) => (
+                                        <AttendeeCard key={attendee._id} attendee={{
+                                            _id: attendee._id,
+                                            email: attendee.email,
+                                            status: attendee.status,
+                                            createdAt: attendee.createdAt.toString()
+                                        }} />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </aside>
             </div>
 

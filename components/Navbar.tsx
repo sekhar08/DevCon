@@ -70,7 +70,12 @@ function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () 
                 );
             })}
             {session.data && (
-                <div className="relative" ref={dropdownRef}>
+                <div
+                    className="relative"
+                    ref={dropdownRef}
+                    onMouseEnter={() => !isMobile && setIsDropdownOpen(true)}
+                    onMouseLeave={() => !isMobile && setIsDropdownOpen(false)}
+                >
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         className={`flex items-center justify-center rounded-full border-2 transition-all duration-300 focus:outline-none ml-2 ${isDropdownOpen ? 'border-primary ring-2 ring-primary/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'border-border-dark/60 hover:border-primary/50 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]'}`}

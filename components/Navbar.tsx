@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "motion/react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, CalendarRange, PlusSquare, LogOut, User as UserIcon } from "lucide-react"
 import { useSession, signOut } from "@/lib/auth-client";
 
 function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () => void }) {
@@ -73,7 +73,7 @@ function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () 
                 <div className="relative" ref={dropdownRef}>
                     <button
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        className={`flex items-center justify-center rounded-full border-2 transition-colors focus:outline-none ml-1 ${isDropdownOpen ? 'border-primary' : 'border-transparent hover:border-primary/50'}`}
+                        className={`flex items-center justify-center rounded-full border-2 transition-all duration-300 focus:outline-none ml-2 ${isDropdownOpen ? 'border-primary ring-2 ring-primary/20 shadow-[0_0_15px_rgba(255,255,255,0.1)]' : 'border-border-dark/60 hover:border-primary/50 hover:shadow-[0_0_10px_rgba(255,255,255,0.05)]'}`}
                     >
                         {session.data.user?.image ? (
                             <Image
@@ -81,10 +81,10 @@ function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () 
                                 alt="Profile"
                                 width={36}
                                 height={36}
-                                className="rounded-full object-cover w-9 h-9"
+                                className="rounded-full object-cover w-9 h-9 border-[1px] border-dark-100"
                             />
                         ) : (
-                            <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                            <div className="w-9 h-9 rounded-full bg-dark-200/80 border-[1px] border-dark-100 flex items-center justify-center text-primary font-bold">
                                 {session.data.user?.name?.charAt(0)?.toUpperCase() || session.data.user?.email?.charAt(0)?.toUpperCase() || 'U'}
                             </div>
                         )}
@@ -93,33 +93,47 @@ function NavLinks({ isMobile, closeMenu }: { isMobile?: boolean, closeMenu?: () 
                     <AnimatePresence>
                         {isDropdownOpen && (
                             <motion.div
-                                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                animate={{ opacity: 1, y: 0, scale: 1 }}
-                                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                transition={{ duration: 0.2 }}
-                                className={`${isMobile ? 'relative mt-4 w-[200px] text-center' : 'absolute right-0 mt-2 w-48'} rounded-xl bg-dark-200 border border-border-dark/60 shadow-xl overflow-hidden z-[100]`}
+                                initial={{ opacity: 0, y: 15, scale: 0.95, filter: "blur(4px)" }}
+                                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, y: 10, scale: 0.95, filter: "blur(4px)" }}
+                                transition={{ duration: 0.2, type: "spring", stiffness: 300, damping: 25 }}
+                                className={`${isMobile ? 'relative mt-6 w-full max-w-[280px] mx-auto' : 'absolute right-0 mt-3 w-56'} rounded-2xl bg-dark-200/95 backdrop-blur-xl border border-border-dark shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden z-[100]`}
                             >
-                                <div className="py-2 flex flex-col">
+                                {/* User Info Header */}
+                                <div className="px-5 py-4 border-b border-border-dark/50 bg-dark-300/30">
+                                    <p className="text-sm font-semibold text-white truncate flex items-center gap-2">
+                                        <UserIcon size={14} className="text-primary/70" />
+                                        {session.data.user?.name || "Operative"}
+                                    </p>
+                                    <p className="text-xs text-light-200/60 truncate mt-1 font-martian-mono tracking-wider">
+                                        {session.data.user?.email}
+                                    </p>
+                                </div>
+
+                                <div className="p-2 flex flex-col gap-1">
                                     <Link
                                         href="/your-events"
                                         onClick={() => { setIsDropdownOpen(false); if (closeMenu) closeMenu(); }}
-                                        className="block px-4 py-2.5 text-sm text-light-200 hover:bg-dark-300 hover:text-white transition-colors"
+                                        className="group flex items-center gap-3 px-3 py-2.5 text-sm text-light-200 hover:bg-dark-300 hover:text-white rounded-xl transition-all duration-200"
                                     >
-                                        Your events
+                                        <CalendarRange size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
+                                        Your Events
                                     </Link>
                                     <Link
                                         href="/createEvent"
                                         onClick={() => { setIsDropdownOpen(false); if (closeMenu) closeMenu(); }}
-                                        className="block px-4 py-2.5 text-sm text-light-200 hover:bg-dark-300 hover:text-white transition-colors"
+                                        className="group flex items-center gap-3 px-3 py-2.5 text-sm text-light-200 hover:bg-dark-300 hover:text-white rounded-xl transition-all duration-200"
                                     >
+                                        <PlusSquare size={16} className="text-primary/60 group-hover:text-primary transition-colors" />
                                         Create Event
                                     </Link>
-                                    <div className="h-px bg-border-dark/60 my-1"></div>
+                                    <div className="h-px bg-border-dark/60 my-1 mx-2"></div>
                                     <button
                                         onClick={handleSignOut}
-                                        className={`w-full px-4 py-2.5 text-sm text-red-500 hover:bg-dark-300 hover:text-red-400 transition-colors ${isMobile ? 'text-center' : 'text-left'}`}
+                                        className="group flex items-center gap-3 w-full px-3 py-2.5 text-sm text-red-400/80 hover:bg-red-500/10 hover:text-red-400 rounded-xl transition-all duration-200 text-left"
                                     >
-                                        Sign Out
+                                        <LogOut size={16} className="text-red-400/60 group-hover:text-red-400 transition-colors" />
+                                        Initialize Sign Out
                                     </button>
                                 </div>
                             </motion.div>
